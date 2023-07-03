@@ -1,0 +1,911 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="data/lib_win_1.js"></script>
+        <script src="data/grn_win_2.js"></script>
+        <script src="data/newdem_win_3.js"></script>
+        <script src="data/que_win_4.js"></script>
+        <script src="data/ind_win_5.js"></script>
+        <script src="data/con_win_3_6.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[46.90708772087954,-119.35751836933822],[56.96966332897383,-99.85967784627512]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_GoogleMaps_0');
+        map.getPane('pane_GoogleMaps_0').style.zIndex = 400;
+        var layer_GoogleMaps_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleMaps_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_GoogleMaps_0;
+        map.addLayer(layer_GoogleMaps_0);
+        function pop_lib_win_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ED_NAMEE'] !== null ? autolinker.link(feature.properties['ED_NAMEE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['지역'] !== null ? autolinker.link(feature.properties['지역'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['사진'] !== null ? autolinker.link(feature.properties['사진'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">당선인</th>\
+                        <td>' + (feature.properties['당선인'] !== null ? autolinker.link(feature.properties['당선인'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">정당</th>\
+                        <td>' + (feature.properties['정당'] !== null ? autolinker.link(feature.properties['정당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">자유당</th>\
+                        <td>' + (feature.properties['자유당'] !== null ? autolinker.link(feature.properties['자유당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">보수당</th>\
+                        <td>' + (feature.properties['보수당'] !== null ? autolinker.link(feature.properties['보수당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">신민당</th>\
+                        <td>' + (feature.properties['신민당'] !== null ? autolinker.link(feature.properties['신민당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">녹색당</th>\
+                        <td>' + (feature.properties['녹색당'] !== null ? autolinker.link(feature.properties['녹색당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">인민당</th>\
+                        <td>' + (feature.properties['인민당'] !== null ? autolinker.link(feature.properties['인민당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">퀘벡당</th>\
+                        <td>' + (feature.properties['퀘벡당'] !== null ? autolinker.link(feature.properties['퀘벡당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['비고'] !== null ? autolinker.link(feature.properties['비고'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_lib_win_1_0(feature) {
+            if (feature.properties['자유당'] >= 0.000000 && feature.properties['자유당'] <= 30.000000 ) {
+                return {
+                pane: 'pane_lib_win_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(234,148,157,0.9725490196078431)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['자유당'] >= 30.000000 && feature.properties['자유당'] <= 40.000000 ) {
+                return {
+                pane: 'pane_lib_win_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(232,111,118,0.9803921568627451)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['자유당'] >= 40.000000 && feature.properties['자유당'] <= 50.000000 ) {
+                return {
+                pane: 'pane_lib_win_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(229,74,78,0.9882352941176471)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['자유당'] >= 50.000000 && feature.properties['자유당'] <= 60.000000 ) {
+                return {
+                pane: 'pane_lib_win_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(226,37,39,0.996078431372549)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['자유당'] >= 60.000000 && feature.properties['자유당'] <= 69.000000 ) {
+                return {
+                pane: 'pane_lib_win_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(223,0,0,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_lib_win_1');
+        map.getPane('pane_lib_win_1').style.zIndex = 401;
+        map.getPane('pane_lib_win_1').style['mix-blend-mode'] = 'normal';
+        var layer_lib_win_1 = new L.geoJson(json_lib_win_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_lib_win_1',
+            layerName: 'layer_lib_win_1',
+            pane: 'pane_lib_win_1',
+            onEachFeature: pop_lib_win_1,
+            style: style_lib_win_1_0,
+        });
+        bounds_group.addLayer(layer_lib_win_1);
+        map.addLayer(layer_lib_win_1);
+        function pop_grn_win_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ED_NAMEE'] !== null ? autolinker.link(feature.properties['ED_NAMEE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['지역'] !== null ? autolinker.link(feature.properties['지역'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['사진'] !== null ? autolinker.link(feature.properties['사진'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">당선인</th>\
+                        <td>' + (feature.properties['당선인'] !== null ? autolinker.link(feature.properties['당선인'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">정당</th>\
+                        <td>' + (feature.properties['정당'] !== null ? autolinker.link(feature.properties['정당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">자유당</th>\
+                        <td>' + (feature.properties['자유당'] !== null ? autolinker.link(feature.properties['자유당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">보수당</th>\
+                        <td>' + (feature.properties['보수당'] !== null ? autolinker.link(feature.properties['보수당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">신민당</th>\
+                        <td>' + (feature.properties['신민당'] !== null ? autolinker.link(feature.properties['신민당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">녹색당</th>\
+                        <td>' + (feature.properties['녹색당'] !== null ? autolinker.link(feature.properties['녹색당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">인민당</th>\
+                        <td>' + (feature.properties['인민당'] !== null ? autolinker.link(feature.properties['인민당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">퀘벡당</th>\
+                        <td>' + (feature.properties['퀘벡당'] !== null ? autolinker.link(feature.properties['퀘벡당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['비고'] !== null ? autolinker.link(feature.properties['비고'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_grn_win_2_0(feature) {
+            if (feature.properties['녹색당'] >= 0.000000 && feature.properties['녹색당'] <= 30.000000 ) {
+                return {
+                pane: 'pane_grn_win_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(164,228,104,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['녹색당'] >= 30.000000 && feature.properties['녹색당'] <= 40.000000 ) {
+                return {
+                pane: 'pane_grn_win_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(147,211,87,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['녹색당'] >= 40.000000 && feature.properties['녹색당'] <= 36.200000 ) {
+                return {
+                pane: 'pane_grn_win_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(129,194,70,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['녹색당'] >= 36.200000 && feature.properties['녹색당'] <= 36.600000 ) {
+                return {
+                pane: 'pane_grn_win_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(111,176,53,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['녹색당'] >= 36.600000 && feature.properties['녹색당'] <= 37.000000 ) {
+                return {
+                pane: 'pane_grn_win_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(94,159,36,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_grn_win_2');
+        map.getPane('pane_grn_win_2').style.zIndex = 402;
+        map.getPane('pane_grn_win_2').style['mix-blend-mode'] = 'normal';
+        var layer_grn_win_2 = new L.geoJson(json_grn_win_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_grn_win_2',
+            layerName: 'layer_grn_win_2',
+            pane: 'pane_grn_win_2',
+            onEachFeature: pop_grn_win_2,
+            style: style_grn_win_2_0,
+        });
+        bounds_group.addLayer(layer_grn_win_2);
+        map.addLayer(layer_grn_win_2);
+        function pop_newdem_win_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ED_NAMEE'] !== null ? autolinker.link(feature.properties['ED_NAMEE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['지역'] !== null ? autolinker.link(feature.properties['지역'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['사진'] !== null ? autolinker.link(feature.properties['사진'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">당선인</th>\
+                        <td>' + (feature.properties['당선인'] !== null ? autolinker.link(feature.properties['당선인'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">정당</th>\
+                        <td>' + (feature.properties['정당'] !== null ? autolinker.link(feature.properties['정당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">자유당</th>\
+                        <td>' + (feature.properties['자유당'] !== null ? autolinker.link(feature.properties['자유당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">보수당</th>\
+                        <td>' + (feature.properties['보수당'] !== null ? autolinker.link(feature.properties['보수당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">신민당</th>\
+                        <td>' + (feature.properties['신민당'] !== null ? autolinker.link(feature.properties['신민당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">녹색당</th>\
+                        <td>' + (feature.properties['녹색당'] !== null ? autolinker.link(feature.properties['녹색당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">인민당</th>\
+                        <td>' + (feature.properties['인민당'] !== null ? autolinker.link(feature.properties['인민당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">퀘벡당</th>\
+                        <td>' + (feature.properties['퀘벡당'] !== null ? autolinker.link(feature.properties['퀘벡당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['비고'] !== null ? autolinker.link(feature.properties['비고'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_newdem_win_3_0(feature) {
+            if (feature.properties['신민당'] >= 22.000000 && feature.properties['신민당'] <= 30.000000 ) {
+                return {
+                pane: 'pane_newdem_win_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(255,192,137,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['신민당'] >= 30.000000 && feature.properties['신민당'] <= 40.000000 ) {
+                return {
+                pane: 'pane_newdem_win_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(251,172,103,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['신민당'] >= 40.000000 && feature.properties['신민당'] <= 50.000000 ) {
+                return {
+                pane: 'pane_newdem_win_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(246,151,68,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['신민당'] >= 50.000000 && feature.properties['신민당'] <= 60.000000 ) {
+                return {
+                pane: 'pane_newdem_win_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(241,131,34,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['신민당'] >= 60.000000 && feature.properties['신민당'] <= 61.000000 ) {
+                return {
+                pane: 'pane_newdem_win_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(236,110,0,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_newdem_win_3');
+        map.getPane('pane_newdem_win_3').style.zIndex = 403;
+        map.getPane('pane_newdem_win_3').style['mix-blend-mode'] = 'normal';
+        var layer_newdem_win_3 = new L.geoJson(json_newdem_win_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_newdem_win_3',
+            layerName: 'layer_newdem_win_3',
+            pane: 'pane_newdem_win_3',
+            onEachFeature: pop_newdem_win_3,
+            style: style_newdem_win_3_0,
+        });
+        bounds_group.addLayer(layer_newdem_win_3);
+        map.addLayer(layer_newdem_win_3);
+        function pop_que_win_4(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ED_NAMEE'] !== null ? autolinker.link(feature.properties['ED_NAMEE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['지역'] !== null ? autolinker.link(feature.properties['지역'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['사진'] !== null ? autolinker.link(feature.properties['사진'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">당선인</th>\
+                        <td>' + (feature.properties['당선인'] !== null ? autolinker.link(feature.properties['당선인'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">정당</th>\
+                        <td>' + (feature.properties['정당'] !== null ? autolinker.link(feature.properties['정당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">자유당</th>\
+                        <td>' + (feature.properties['자유당'] !== null ? autolinker.link(feature.properties['자유당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">보수당</th>\
+                        <td>' + (feature.properties['보수당'] !== null ? autolinker.link(feature.properties['보수당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">신민당</th>\
+                        <td>' + (feature.properties['신민당'] !== null ? autolinker.link(feature.properties['신민당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">녹색당</th>\
+                        <td>' + (feature.properties['녹색당'] !== null ? autolinker.link(feature.properties['녹색당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">인민당</th>\
+                        <td>' + (feature.properties['인민당'] !== null ? autolinker.link(feature.properties['인민당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">퀘벡당</th>\
+                        <td>' + (feature.properties['퀘벡당'] !== null ? autolinker.link(feature.properties['퀘벡당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['비고'] !== null ? autolinker.link(feature.properties['비고'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_que_win_4_0(feature) {
+            if (feature.properties['퀘벡당'] >= 30.000000 && feature.properties['퀘벡당'] <= 30.000000 ) {
+                return {
+                pane: 'pane_que_win_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(133,255,253,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['퀘벡당'] >= 30.000000 && feature.properties['퀘벡당'] <= 40.000000 ) {
+                return {
+                pane: 'pane_que_win_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(100,232,232,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['퀘벡당'] >= 40.000000 && feature.properties['퀘벡당'] <= 50.000000 ) {
+                return {
+                pane: 'pane_que_win_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(66,209,210,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['퀘벡당'] >= 50.000000 && feature.properties['퀘벡당'] <= 60.000000 ) {
+                return {
+                pane: 'pane_que_win_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(33,186,188,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['퀘벡당'] >= 60.000000 && feature.properties['퀘벡당'] <= 60.000000 ) {
+                return {
+                pane: 'pane_que_win_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(0,163,166,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_que_win_4');
+        map.getPane('pane_que_win_4').style.zIndex = 404;
+        map.getPane('pane_que_win_4').style['mix-blend-mode'] = 'normal';
+        var layer_que_win_4 = new L.geoJson(json_que_win_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_que_win_4',
+            layerName: 'layer_que_win_4',
+            pane: 'pane_que_win_4',
+            onEachFeature: pop_que_win_4,
+            style: style_que_win_4_0,
+        });
+        bounds_group.addLayer(layer_que_win_4);
+        map.addLayer(layer_que_win_4);
+        function pop_ind_win_5(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ED_NAMEE'] !== null ? autolinker.link(feature.properties['ED_NAMEE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['지역'] !== null ? autolinker.link(feature.properties['지역'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['사진'] !== null ? autolinker.link(feature.properties['사진'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">당선인</th>\
+                        <td>' + (feature.properties['당선인'] !== null ? autolinker.link(feature.properties['당선인'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">정당</th>\
+                        <td>' + (feature.properties['정당'] !== null ? autolinker.link(feature.properties['정당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">자유당</th>\
+                        <td>' + (feature.properties['자유당'] !== null ? autolinker.link(feature.properties['자유당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">보수당</th>\
+                        <td>' + (feature.properties['보수당'] !== null ? autolinker.link(feature.properties['보수당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">신민당</th>\
+                        <td>' + (feature.properties['신민당'] !== null ? autolinker.link(feature.properties['신민당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">녹색당</th>\
+                        <td>' + (feature.properties['녹색당'] !== null ? autolinker.link(feature.properties['녹색당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">인민당</th>\
+                        <td>' + (feature.properties['인민당'] !== null ? autolinker.link(feature.properties['인민당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">퀘벡당</th>\
+                        <td>' + (feature.properties['퀘벡당'] !== null ? autolinker.link(feature.properties['퀘벡당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['비고'] !== null ? autolinker.link(feature.properties['비고'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_ind_win_5_0(feature) {
+            if (feature.properties['q2wHide_득표'] >= 0.000000 && feature.properties['q2wHide_득표'] <= 30.000000 ) {
+                return {
+                pane: 'pane_ind_win_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(190,190,190,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_득표'] >= 30.000000 && feature.properties['q2wHide_득표'] <= 40.000000 ) {
+                return {
+                pane: 'pane_ind_win_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(163,163,163,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_득표'] >= 40.000000 && feature.properties['q2wHide_득표'] <= 50.000000 ) {
+                return {
+                pane: 'pane_ind_win_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(135,135,135,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_득표'] >= 50.000000 && feature.properties['q2wHide_득표'] <= 60.000000 ) {
+                return {
+                pane: 'pane_ind_win_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(107,107,107,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_득표'] >= 60.000000 && feature.properties['q2wHide_득표'] <= 70.000000 ) {
+                return {
+                pane: 'pane_ind_win_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(80,80,80,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_ind_win_5');
+        map.getPane('pane_ind_win_5').style.zIndex = 405;
+        map.getPane('pane_ind_win_5').style['mix-blend-mode'] = 'normal';
+        var layer_ind_win_5 = new L.geoJson(json_ind_win_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_ind_win_5',
+            layerName: 'layer_ind_win_5',
+            pane: 'pane_ind_win_5',
+            onEachFeature: pop_ind_win_5,
+            style: style_ind_win_5_0,
+        });
+        bounds_group.addLayer(layer_ind_win_5);
+        map.addLayer(layer_ind_win_5);
+        function pop_con_win_3_6(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ED_NAMEE'] !== null ? autolinker.link(feature.properties['ED_NAMEE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['지역'] !== null ? autolinker.link(feature.properties['지역'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['사진'] !== null ? autolinker.link(feature.properties['사진'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">당선인</th>\
+                        <td>' + (feature.properties['당선인'] !== null ? autolinker.link(feature.properties['당선인'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">정당</th>\
+                        <td>' + (feature.properties['정당'] !== null ? autolinker.link(feature.properties['정당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">자유당</th>\
+                        <td>' + (feature.properties['자유당'] !== null ? autolinker.link(feature.properties['자유당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">보수당</th>\
+                        <td>' + (feature.properties['보수당'] !== null ? autolinker.link(feature.properties['보수당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">신민당</th>\
+                        <td>' + (feature.properties['신민당'] !== null ? autolinker.link(feature.properties['신민당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">녹색당</th>\
+                        <td>' + (feature.properties['녹색당'] !== null ? autolinker.link(feature.properties['녹색당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">인민당</th>\
+                        <td>' + (feature.properties['인민당'] !== null ? autolinker.link(feature.properties['인민당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">퀘벡당</th>\
+                        <td>' + (feature.properties['퀘벡당'] !== null ? autolinker.link(feature.properties['퀘벡당'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['비고'] !== null ? autolinker.link(feature.properties['비고'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_con_win_3_6_0(feature) {
+            if (feature.properties['보수당'] >= 0.000000 && feature.properties['보수당'] <= 30.000000 ) {
+                return {
+                pane: 'pane_con_win_3_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(152,187,235,0.9725490196078431)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['보수당'] >= 30.000000 && feature.properties['보수당'] <= 40.000000 ) {
+                return {
+                pane: 'pane_con_win_3_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(118,162,210,0.9803921568627451)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['보수당'] >= 40.000000 && feature.properties['보수당'] <= 50.000000 ) {
+                return {
+                pane: 'pane_con_win_3_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(84,136,185,0.9882352941176471)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['보수당'] >= 50.000000 && feature.properties['보수당'] <= 60.000000 ) {
+                return {
+                pane: 'pane_con_win_3_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(50,110,159,0.996078431372549)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['보수당'] >= 60.000000 && feature.properties['보수당'] <= 76.000000 ) {
+                return {
+                pane: 'pane_con_win_3_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 0.7,
+                fillColor: 'rgba(17,85,134,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_con_win_3_6');
+        map.getPane('pane_con_win_3_6').style.zIndex = 406;
+        map.getPane('pane_con_win_3_6').style['mix-blend-mode'] = 'normal';
+        var layer_con_win_3_6 = new L.geoJson(json_con_win_3_6, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_con_win_3_6',
+            layerName: 'layer_con_win_3_6',
+            pane: 'pane_con_win_3_6',
+            onEachFeature: pop_con_win_3_6,
+            style: style_con_win_3_6_0,
+        });
+        bounds_group.addLayer(layer_con_win_3_6);
+        map.addLayer(layer_con_win_3_6);
+        setBounds();
+        </script>
+    </body>
+</html>
